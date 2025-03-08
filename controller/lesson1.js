@@ -1,21 +1,36 @@
+const Task = require('../models/Task');
 
-const andrereis = (req, res) => {
-  res.send('ola andre');
-};
 
-const emilyRoute = (req, res) => {
-  res.send('Emily Birch');
+const getAllTask = async (req, res) => {  
+  try{
+    const taskList = await Task.find();
+    return res.render("index", taskList)
 
-};
-const hannnhRoute = (req, res) => {
-  res.send('Hannah Birch');
+  }catch(err){
+    res.status(500).send({error: err.message})
+  }
 
-  };
+ 
+}
+
+const createTask = async (req, res) => {
+
+  const task = req.body;
+  if (!task.task){
+    return res.redirect("/")
+  }
+try{
+  await Task.create(task);
+  return res.redirect("/")
+}catch(err){
+  res.status(500).send({error: err.message})
+
+}
+}
 
   module.exports = {
-    andrereis,
-    emilyRoute,
-    hannnhRoute
+    getAllTask ,
+    createTask,
   };
 
   
